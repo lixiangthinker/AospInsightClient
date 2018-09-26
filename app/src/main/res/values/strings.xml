@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AOSP Browser</string>
+    <string name="title_home">Home</string>
+    <string name="title_project_summary">Project</string>
+    <string name="title_project">Repos</string>
+    <string name="btn_submit">Submit</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_change_project">Change Project</string>
+    <string name="menu_change_date_since">Date Since..</string>
+    <string name="menu_change_date_until">Date Until...</string>
+</resources>
