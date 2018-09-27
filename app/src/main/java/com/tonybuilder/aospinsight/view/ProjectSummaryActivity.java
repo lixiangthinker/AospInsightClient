@@ -28,16 +28,14 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.app.AppCompatActivity;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ProjectSummaryActivity extends AppCompatActivity {
+public class ProjectSummaryActivity extends DaggerAppCompatActivity {
     private static final String TAG = "ProjectSummaryActivity";
 
     @Inject

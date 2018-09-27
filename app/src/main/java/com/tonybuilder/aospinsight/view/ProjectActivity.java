@@ -1,13 +1,13 @@
 package com.tonybuilder.aospinsight.view;
 
-import androidx.appcompat.app.AppCompatActivity;
+import dagger.android.support.DaggerAppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.tonybuilder.aospinsight.R;
 
-public class ProjectActivity extends AppCompatActivity {
+public class ProjectActivity extends DaggerAppCompatActivity {
 
     private static final String TAG = "ProjectActivity";
 

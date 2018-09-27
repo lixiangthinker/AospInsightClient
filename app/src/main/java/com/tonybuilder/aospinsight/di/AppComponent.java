@@ -16,14 +16,12 @@
 
 package com.tonybuilder.aospinsight.di;
 
-import android.app.Application;
-
 import com.tonybuilder.aospinsight.AospInsightApp;
 
 import javax.inject.Singleton;
 
-import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @Singleton
@@ -31,11 +29,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         AppModule.class
 })
-public interface AppComponent {
+public interface AppComponent extends AndroidInjector<AospInsightApp> {
     @Component.Builder
-    interface Builder {
-        @BindsInstance Builder application(Application application);
-        AppComponent build();
+    abstract class Builder extends AndroidInjector.Builder<AospInsightApp> {
     }
-    void inject(AospInsightApp aospInsightApp);
 }

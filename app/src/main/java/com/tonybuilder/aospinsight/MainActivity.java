@@ -20,10 +20,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-import androidx.appcompat.app.AppCompatActivity;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends DaggerAppCompatActivity {
     private static final String TAG = "MainActivity";
     private AospInsightDatebase db;
 
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private ProjectSummary getProjectSummary(int projectOrigId, String strSince, String strUntil) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date since = sdf.parse(strSince);
         Date until = sdf.parse(strUntil);
         ProjectSummary result = new ProjectSummary();
