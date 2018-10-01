@@ -16,7 +16,7 @@
 
 package com.tonybuilder.aospinsight.di;
 
-import android.app.Application;
+import android.util.Log;
 
 import com.github.leonardoxh.livedatacalladapter.LiveDataCallAdapterFactory;
 import com.github.leonardoxh.livedatacalladapter.LiveDataResponseBodyConverterFactory;
@@ -25,10 +25,14 @@ import com.tonybuilder.aospinsight.dao.AospInsightDatebase;
 import com.tonybuilder.aospinsight.dao.ProjectSummaryDao;
 import com.tonybuilder.aospinsight.net.RetrofitService;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,8 +40,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 class AppModule {
     @Singleton @Provides
     RetrofitService provideGithubService() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message ->
+                Log.i("NetApiLog", message));
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .addInterceptor(loggingInterceptor)
+                .build();
+
         return new Retrofit.Builder()
                 .baseUrl("http://192.168.1.111:8080/")
+                .client(client)
                 .addCallAdapterFactory(LiveDataCallAdapterFactory.create())
                 .addConverterFactory(LiveDataResponseBodyConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
