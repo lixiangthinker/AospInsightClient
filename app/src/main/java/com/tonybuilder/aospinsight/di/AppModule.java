@@ -17,7 +17,10 @@
 package com.tonybuilder.aospinsight.di;
 
 import android.app.Application;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import com.github.leonardoxh.livedatacalladapter.LiveDataCallAdapterFactory;
+import com.github.leonardoxh.livedatacalladapter.LiveDataResponseBodyConverterFactory;
+import com.tonybuilder.aospinsight.AospInsightApp;
 import com.tonybuilder.aospinsight.dao.AospInsightDatebase;
 import com.tonybuilder.aospinsight.dao.ProjectSummaryDao;
 import com.tonybuilder.aospinsight.net.RetrofitService;
@@ -29,21 +32,20 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//@Module(includes = ViewModelModule.class)
-@Module
+@Module(includes = ViewModelModule.class)
 class AppModule {
     @Singleton @Provides
     RetrofitService provideGithubService() {
         return new Retrofit.Builder()
                 .baseUrl("http://192.168.1.111:8080/")
+                .addCallAdapterFactory(LiveDataCallAdapterFactory.create())
+                .addConverterFactory(LiveDataResponseBodyConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                // TODO: change to new LiveDataCallAdapterFactory()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(RetrofitService.class);
     }
 
     @Singleton @Provides
-    AospInsightDatebase provideDb(Application app) {
+    AospInsightDatebase provideDb(AospInsightApp app) {
         return AospInsightDatebase.getInstance(app);
     }
 

@@ -27,10 +27,10 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Singleton
 @Component(modules = {
         AndroidSupportInjectionModule.class,
-        AppModule.class
+        AppModule.class,
+        ActivityBuilder.class
 })
 public interface AppComponent extends AndroidInjector<AospInsightApp> {
     @Component.Builder
-    abstract class Builder extends AndroidInjector.Builder<AospInsightApp> {
-    }
+    abstract class Builder extends AndroidInjector.Builder<AospInsightApp>{}
 }
