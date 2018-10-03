@@ -12,7 +12,6 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.LineData;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
-import com.tonybuilder.aospinsight.net.RetrofitService;
 import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.view.utils.LineChartManager;
 import com.tonybuilder.aospinsight.viewmodel.ProjectSummaryViewModel;
@@ -34,8 +33,6 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class ProjectSummaryActivity extends DaggerAppCompatActivity {
     private static final String TAG = "ProjectSummaryActivity";
-    @Inject
-    RetrofitService service;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private ProjectSummaryViewModel projectSummaryViewModel;

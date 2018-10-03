@@ -1,6 +1,7 @@
 package com.tonybuilder.aospinsight.net;
 
 import com.github.leonardoxh.livedatacalladapter.Resource;
+import com.tonybuilder.aospinsight.model.Project;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.net.model.Api;
 
@@ -22,4 +23,10 @@ public interface RetrofitService {
     LiveData<Resource<Api<List<ProjectSummary>>>> getProjectSummary(@Path("projectId") Integer projectId,
                                                                     @Path("since") String since,
                                                                     @Path("until") String until);
+
+    /**
+     * get project list info
+     */
+    @GET("api/project")
+    LiveData<Resource<Api<List<Project>>>> getProjects();
 }
