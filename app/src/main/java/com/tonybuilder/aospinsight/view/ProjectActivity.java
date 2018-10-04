@@ -7,15 +7,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerAppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.google.android.material.snackbar.Snackbar;
+import com.tonybuilder.aospinsight.MainActivity;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.Project;
 import com.tonybuilder.aospinsight.net.model.Api;
@@ -48,8 +51,7 @@ public class ProjectActivity extends DaggerAppCompatActivity {
             @Override
             public void onChanged(Resource<Api<List<Project>>> apiResource) {
                 if (apiResource.isSuccess()) {
-                    //TODO: show project in recycler view.
-                    Log.e(TAG, apiResource.getResource().getPayload().size()+ " projects updated");
+                    Log.i(TAG, apiResource.getResource().getPayload().size()+ " projects updated");
                     mData = apiResource.getResource().getPayload();
                     mAdapter.notifyDataSetChanged();
                     Snackbar.make(rvProjectList, apiResource.getResource().getPayload().size()+ " projects updated", Snackbar.LENGTH_LONG)
@@ -69,6 +71,13 @@ public class ProjectActivity extends DaggerAppCompatActivity {
         rvProjectList.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new ProjectListAdapter();
         rvProjectList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((view, data) -> {
+            Log.i(TAG, "project name " + data.getProjectName() + " project id " + data.getProjectId());
+            Intent intent = new Intent(this, ProjectSummaryActivity.class);
+            intent.putExtra("projectId", data.getProjectId());
+            intent.putExtra("projectName", data.getProjectName());
+            startActivity(intent);
+        });
     }
 
     private void initData() {
@@ -78,15 +87,33 @@ public class ProjectActivity extends DaggerAppCompatActivity {
         mData = new ArrayList<>();
         mData.add(project);
     }
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view , Project data);
+    }
 
     class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ProjectEntryViewHolder>
+            implements View.OnClickListener
     {
+        private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+        public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+            this.mOnItemClickListener = listener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mOnItemClickListener != null) {
+                //注意这里使用getTag方法获取数据
+                mOnItemClickListener.onItemClick(v,(Project)v.getTag());
+            }
+        }
+
         @Override
         public ProjectEntryViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
         {
-            ProjectEntryViewHolder holder = new ProjectEntryViewHolder(LayoutInflater.from(
-                    ProjectActivity.this).inflate(R.layout.item_project_entry, parent,
-                    false));
+            View view = LayoutInflater.from( ProjectActivity.this).inflate(R.layout.item_project_entry,
+                    parent, false);
+            ProjectEntryViewHolder holder = new ProjectEntryViewHolder(view);
+            view.setOnClickListener(this);
             return holder;
         }
 
@@ -95,6 +122,7 @@ public class ProjectActivity extends DaggerAppCompatActivity {
         {
             holder.tvProjectId.setText(String.valueOf(mData.get(position).getProjectId()));
             holder.tvProjectName.setText(mData.get(position).getProjectName());
+            holder.itemView.setTag(mData.get(position));
         }
 
         @Override
@@ -107,12 +135,14 @@ public class ProjectActivity extends DaggerAppCompatActivity {
         {
             TextView tvProjectName;
             TextView tvProjectId;
+            ImageView imvProjectDetail;
 
             public ProjectEntryViewHolder(View view)
             {
                 super(view);
                 tvProjectId = view.findViewById(R.id.tv_project_id);
                 tvProjectName = view.findViewById(R.id.tv_project_name);
+                imvProjectDetail = view.findViewById(R.id.imv_project_detail);
             }
         }
     }
