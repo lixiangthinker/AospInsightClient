@@ -7,7 +7,6 @@ import com.tonybuilder.aospinsight.repository.ProjectSummaryRepo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,7 +33,6 @@ public class ProjectSummaryViewModel extends ViewModel {
     }
 
     public LiveData<Map<Integer, String>> getProjectIdNameMap() {
-        //TODO: fetch from net api or local database cache.
         return projectIdNameMap;
     }
 
@@ -82,5 +80,9 @@ public class ProjectSummaryViewModel extends ViewModel {
     }
     public LiveData<Calendar> getCalendarUntil() {
         return calendarUntil;
+    }
+
+    public void setProjectInfo(Map<Integer,String> projectMap) {
+        projectIdNameMap.setValue(projectMap);
     }
 }

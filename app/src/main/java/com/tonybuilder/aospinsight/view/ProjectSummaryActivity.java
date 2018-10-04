@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.github.mikephil.charting.charts.LineChart;
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -49,10 +51,21 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_summary);
         projectSummaryViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProjectSummaryViewModel.class);
-        //MPAndroidChart
-        initChart();
 
+        initProjectInfo(projectSummaryViewModel);
+        initChart();
         subscribe();
+    }
+
+    private void initProjectInfo(ProjectSummaryViewModel viewModel) {
+        String projectName = getIntent().getStringExtra("projectName");
+        int projectId = getIntent().getIntExtra("projectId", 390);
+
+        Map<Integer, String> projectMap = new HashMap<>();
+        projectMap.put(projectId, projectName);
+        viewModel.setProjectInfo(projectMap);
+        TextView tvProjectName = findViewById(R.id.tv_project_name);
+        tvProjectName.setText(projectName);
     }
 
     final Observer<Resource<Api<List<ProjectSummary>>>> projectSummariesObserver = resource -> {
