@@ -1,6 +1,7 @@
 package com.tonybuilder.aospinsight.view;
 
-import androidx.lifecycle.Observer;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,18 +11,12 @@ import dagger.android.support.DaggerAppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.google.android.material.snackbar.Snackbar;
-import com.tonybuilder.aospinsight.MainActivity;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.Project;
-import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.viewmodel.ProjectViewModel;
 
 import java.util.ArrayList;
@@ -47,37 +42,8 @@ public class ProjectActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_project);
         projectViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProjectViewModel.class);
 
-        projectViewModel.getProjects().observe(this, new Observer<Resource<Api<List<Project>>>>() {
-            @Override
-            public void onChanged(Resource<Api<List<Project>>> apiResource) {
-                if (apiResource.isSuccess()) {
-                    Log.i(TAG, apiResource.getResource().getPayload().size()+ " projects updated");
-                    mData = apiResource.getResource().getPayload();
-                    mAdapter.notifyDataSetChanged();
-                    Snackbar.make(rvProjectList, apiResource.getResource().getPayload().size()+ " projects updated", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    Log.e(TAG, apiResource.getError().getMessage());
-                }
-            }
-        });
-
         initRecyclerView();
-    }
-
-    private void initRecyclerView() {
-        initData();
-        rvProjectList = findViewById(R.id.rv_project_list);
-        rvProjectList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ProjectListAdapter();
-        rvProjectList.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((view, data) -> {
-            Log.i(TAG, "project name " + data.getProjectName() + " project id " + data.getProjectId());
-            Intent intent = new Intent(this, ProjectSummaryActivity.class);
-            intent.putExtra("projectId", data.getProjectId());
-            intent.putExtra("projectName", data.getProjectName());
-            startActivity(intent);
-        });
+        subscribe();
     }
 
     private void initData() {
@@ -87,63 +53,85 @@ public class ProjectActivity extends DaggerAppCompatActivity {
         mData = new ArrayList<>();
         mData.add(project);
     }
-    public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view , Project data);
+
+    private void initRecyclerView() {
+        initData();
+        rvProjectList = findViewById(R.id.rv_project_list);
+        rvProjectList.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new ProjectListAdapter(this);
+        mAdapter.setProjectList(mData);
+        rvProjectList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((view, data) -> {
+            Log.i(TAG, "project name " + data.getProjectName() + " project id " + data.getProjectId());
+            Intent intent = new Intent(this, ProjectSummaryActivity.class);
+            intent.putExtra("projectId", data.getProjectId());
+            intent.putExtra("projectName", data.getProjectName());
+            startActivity(intent);
+        });
+    }
+    private void subscribe() {
+        // refresh project data
+        projectViewModel.getProjects().observe(this, apiResource -> {
+            if (apiResource.isSuccess()) {
+                Log.i(TAG, apiResource.getResource().getPayload().size() + " projects updated");
+                mData = apiResource.getResource().getPayload();
+                mAdapter.setProjectList(mData);
+                mAdapter.notifyDataSetChanged();
+                Snackbar.make(rvProjectList, apiResource.getResource().getPayload().size() + " projects updated", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else {
+                Log.e(TAG, apiResource.getError().getMessage());
+            }
+        });
+
+        // refresh search result
+        projectViewModel.getQueryString().observe(this, query -> {
+            Log.d(TAG, "query = " + query);
+            List<Project> result = projectViewModel.doQuery(query, mData);
+            mAdapter.setKeyWords(query);
+            mAdapter.setProjectList(result);
+            mAdapter.notifyDataSetChanged();
+        });
     }
 
-    class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ProjectEntryViewHolder>
-            implements View.OnClickListener
-    {
-        private OnRecyclerViewItemClickListener mOnItemClickListener = null;
-        public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
-            this.mOnItemClickListener = listener;
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_project, menu);
+        initSearchView(menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        @Override
-        public void onClick(View v) {
-            if (mOnItemClickListener != null) {
-                //注意这里使用getTag方法获取数据
-                mOnItemClickListener.onItemClick(v,(Project)v.getTag());
+    /**
+     * Map search view event to live data change.
+     */
+    private void initSearchView(Menu menu) {
+        MenuItem searchItem = menu.findItem(R.id.menu_project_search);
+        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setIconified(false);
+        mSearchView.setQueryHint("input project name");
+
+        mSearchView.setOnCloseListener(() -> {
+            Log.i(TAG, "search view text closed");
+            projectViewModel.setQueryString(null);
+            return true;
+        });
+
+        mSearchView.setOnSearchClickListener(v -> Log.i(TAG, "search view opened"));
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i(TAG, "search view text submitted");
+                return false;
             }
-        }
 
-        @Override
-        public ProjectEntryViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            View view = LayoutInflater.from( ProjectActivity.this).inflate(R.layout.item_project_entry,
-                    parent, false);
-            ProjectEntryViewHolder holder = new ProjectEntryViewHolder(view);
-            view.setOnClickListener(this);
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(ProjectEntryViewHolder holder, int position)
-        {
-            holder.tvProjectId.setText(String.valueOf(mData.get(position).getProjectId()));
-            holder.tvProjectName.setText(mData.get(position).getProjectName());
-            holder.itemView.setTag(mData.get(position));
-        }
-
-        @Override
-        public int getItemCount()
-        {
-            return mData.size();
-        }
-
-        class ProjectEntryViewHolder extends RecyclerView.ViewHolder
-        {
-            TextView tvProjectName;
-            TextView tvProjectId;
-            ImageView imvProjectDetail;
-
-            public ProjectEntryViewHolder(View view)
-            {
-                super(view);
-                tvProjectId = view.findViewById(R.id.tv_project_id);
-                tvProjectName = view.findViewById(R.id.tv_project_name);
-                imvProjectDetail = view.findViewById(R.id.imv_project_detail);
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.i(TAG, "search view text changed");
+                projectViewModel.setQueryString(s);
+                return true;
             }
-        }
+        });
     }
 }

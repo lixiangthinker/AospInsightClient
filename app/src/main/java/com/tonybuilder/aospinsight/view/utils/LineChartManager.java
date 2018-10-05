@@ -39,7 +39,7 @@ public class LineChartManager {
         LineDataSet dataSet = new LineDataSet(entries, lineName);
         //用y轴的集合来设置参数
         dataSet.setLineWidth(1.75f); // 线宽
-        dataSet.setCircleSize(2f);// 显示的圆形大小
+        dataSet.setCircleRadius(2f);// 显示的圆形大小
         dataSet.setColor(Color.rgb(89, 194, 230));// 折线显示颜色
         dataSet.setCircleColor(Color.rgb(89, 194, 230));// 圆形折点的颜色
         dataSet.setHighLightColor(Color.GREEN); // 高亮的线的颜色
