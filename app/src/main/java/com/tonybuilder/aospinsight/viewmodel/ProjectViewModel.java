@@ -29,7 +29,11 @@ public class ProjectViewModel extends ViewModel {
     }
 
     public LiveData<Resource<Api<List<Project>>>> getProjects() {
-        return projectRepo.getProojects();
+        return projectRepo.getProjects();
+    }
+
+    public LiveData<com.tonybuilder.aospinsight.repository.common.Resource<List<Project>>> getProjectsCached() {
+        return projectRepo.getProjectsCached();
     }
 
     public LiveData<String> getQueryString() {

@@ -4,6 +4,7 @@ import com.tonybuilder.aospinsight.model.Project;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -14,7 +15,10 @@ import androidx.room.Update;
 @Dao
 public interface ProjectDao {
     @Query("SELECT * FROM project")
-    List<Project> getAll();
+    LiveData<List<Project>> getAll();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Project project);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Project... projects);

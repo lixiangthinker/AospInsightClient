@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tonybuilder.aospinsight.model;
+package com.tonybuilder.aospinsight.repository.common;
 
 /**
  * Status of a resource that is provided to the UI.

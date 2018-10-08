@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.google.android.material.snackbar.Snackbar;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.Project;
+import com.tonybuilder.aospinsight.repository.common.Status;
 import com.tonybuilder.aospinsight.viewmodel.ProjectViewModel;
 
 import java.util.ArrayList;
@@ -71,16 +72,39 @@ public class ProjectActivity extends DaggerAppCompatActivity {
     }
     private void subscribe() {
         // refresh project data
-        projectViewModel.getProjects().observe(this, apiResource -> {
-            if (apiResource.isSuccess()) {
-                Log.i(TAG, apiResource.getResource().getPayload().size() + " projects updated");
-                mData = apiResource.getResource().getPayload();
-                mAdapter.setProjectList(mData);
-                mAdapter.notifyDataSetChanged();
-                Snackbar.make(rvProjectList, apiResource.getResource().getPayload().size() + " projects updated", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            } else {
-                Log.e(TAG, apiResource.getError().getMessage());
+//        projectViewModel.getProjects().observe(this, apiResource -> {
+//            if (apiResource.isSuccess()) {
+//                Log.i(TAG, apiResource.getResource().getPayload().size() + " projects updated");
+//                mData = apiResource.getResource().getPayload();
+//                mAdapter.setProjectList(mData);
+//                mAdapter.notifyDataSetChanged();
+//                Snackbar.make(rvProjectList, apiResource.getResource().getPayload().size() + " projects updated", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            } else {
+//                Log.e(TAG, apiResource.getError().getMessage());
+//            }
+//        });
+
+        // refresh project data from NetworkBoundResource
+        projectViewModel.getProjectsCached().observe(this, networkBoundResource -> {
+            Log.i(TAG, "networkBoundResource.status = " + networkBoundResource.status);
+            switch(networkBoundResource.status) {
+                case SUCCESS:
+                    Log.i(TAG, networkBoundResource.data.size() + " projects updated");
+                    mData = networkBoundResource.data;
+                    mAdapter.setProjectList(mData);
+                    mAdapter.notifyDataSetChanged();
+                    Snackbar.make(rvProjectList, networkBoundResource.data.size() + " projects updated", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    break;
+                case ERROR:
+                    Log.e(TAG, networkBoundResource.message);
+                    break;
+                case LOADING:
+                    break;
+                default:
+                    Log.e(TAG, "error network resource status.");
+                    break;
             }
         });
 

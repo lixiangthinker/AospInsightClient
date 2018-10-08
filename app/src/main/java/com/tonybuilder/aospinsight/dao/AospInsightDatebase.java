@@ -31,4 +31,5 @@ public abstract class AospInsightDatebase extends RoomDatabase {
                 DB_NAME).build();
     }
     public abstract ProjectSummaryDao projectSummaryDao();
+    public abstract ProjectDao projectDao();
 }

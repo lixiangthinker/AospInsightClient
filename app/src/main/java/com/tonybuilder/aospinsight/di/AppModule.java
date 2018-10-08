@@ -22,6 +22,7 @@ import com.github.leonardoxh.livedatacalladapter.LiveDataCallAdapterFactory;
 import com.github.leonardoxh.livedatacalladapter.LiveDataResponseBodyConverterFactory;
 import com.tonybuilder.aospinsight.AospInsightApp;
 import com.tonybuilder.aospinsight.dao.AospInsightDatebase;
+import com.tonybuilder.aospinsight.dao.ProjectDao;
 import com.tonybuilder.aospinsight.dao.ProjectSummaryDao;
 import com.tonybuilder.aospinsight.net.RetrofitService;
 
@@ -68,5 +69,10 @@ class AppModule {
     @Singleton @Provides
     ProjectSummaryDao provideProjectSummaryDao(AospInsightDatebase db) {
         return db.projectSummaryDao();
+    }
+
+    @Singleton @Provides
+    ProjectDao provideProjectDao(AospInsightDatebase db) {
+        return db.projectDao();
     }
 }

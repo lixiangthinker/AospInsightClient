@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.tonybuilder.aospinsight.model;
+package com.tonybuilder.aospinsight.repository.common;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static com.tonybuilder.aospinsight.model.Status.ERROR;
-import static com.tonybuilder.aospinsight.model.Status.LOADING;
-import static com.tonybuilder.aospinsight.model.Status.SUCCESS;
+import static com.tonybuilder.aospinsight.repository.common.Status.ERROR;
+import static com.tonybuilder.aospinsight.repository.common.Status.LOADING;
+import static com.tonybuilder.aospinsight.repository.common.Status.SUCCESS;
 
 /**
  * A generic class that holds a value with its loading status.
