@@ -12,6 +12,7 @@ import com.tonybuilder.aospinsight.model.Project;
 import com.tonybuilder.aospinsight.net.RetrofitService;
 import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.repository.common.NetworkBoundResource;
+import com.tonybuilder.aospinsight.repository.common.StatusResource;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class ProjectRepo {
         return retrofitService.getProjects();
     }
 
-    public LiveData<com.tonybuilder.aospinsight.repository.common.Resource<List<Project>>> getProjectsCached() {
+    public LiveData<StatusResource<List<Project>>> getProjectsCached() {
         Log.i(TAG, "project id = ");
         return new NetworkBoundResource<List<Project>,Api<List<Project>>>(appExecutors) {
             @Override
@@ -72,7 +73,7 @@ public class ProjectRepo {
 
 //            @NonNull
 //            @Override
-//            protected LiveData<Resource<Api<List<Project>>>> createCall() {
+//            protected LiveData<StatusResource<Api<List<Project>>>> createCall() {
 //                return retrofitService.getProjects();
 //            }
         }.asLiveData();

@@ -83,7 +83,7 @@ public class ProjectSummaryRepo {
 
     }
 
-//    public LiveData<Resource<ProjectSummary>> loadProjectSummary(String login) {
+//    public LiveData<StatusResource<ProjectSummary>> loadProjectSummary(String login) {
 //        return new NetworkBoundResource<ProjectSummary,ProjectSummary>(appExecutors) {
 //            @Override
 //            protected void saveCallResult(@NonNull ProjectSummary item) {

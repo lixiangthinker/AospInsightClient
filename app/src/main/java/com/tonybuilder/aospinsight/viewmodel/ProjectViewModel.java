@@ -6,6 +6,7 @@ import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.tonybuilder.aospinsight.model.Project;
 import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.repository.ProjectRepo;
+import com.tonybuilder.aospinsight.repository.common.StatusResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ProjectViewModel extends ViewModel {
         return projectRepo.getProjects();
     }
 
-    public LiveData<com.tonybuilder.aospinsight.repository.common.Resource<List<Project>>> getProjectsCached() {
+    public LiveData<StatusResource<List<Project>>> getProjectsCached() {
         return projectRepo.getProjectsCached();
     }
 
