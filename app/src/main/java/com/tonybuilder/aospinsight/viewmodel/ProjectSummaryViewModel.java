@@ -4,6 +4,7 @@ import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.repository.ProjectSummaryRepo;
+import com.tonybuilder.aospinsight.repository.common.StatusResource;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,7 +23,7 @@ public class ProjectSummaryViewModel extends ViewModel {
 
     private ProjectSummaryRepo projectSummaryRepo;
     private MutableLiveData<Map<Integer, String>> projectIdNameMap = new MutableLiveData<>();
-    private LiveData<Resource<Api<List<ProjectSummary>>>> projectSummaries;
+    private LiveData<StatusResource<List<ProjectSummary>>> projectSummaries;
 
     private MutableLiveData<Calendar> calendarSince = new MutableLiveData<>();
     private MutableLiveData<Calendar> calendarUntil = new MutableLiveData<>();
@@ -57,7 +58,7 @@ public class ProjectSummaryViewModel extends ViewModel {
         return defaultValue;
     }
 
-    public LiveData<Resource<Api<List<ProjectSummary>>>> getProjectSummaries() {
+    public LiveData<StatusResource<List<ProjectSummary>>> getProjectSummaries() {
 
         String since = getDateString(calendarSince, "2017-01-01");
         String until = getDateString(calendarUntil,"2018-09-01");

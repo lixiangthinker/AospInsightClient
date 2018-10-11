@@ -8,11 +8,16 @@ import com.tonybuilder.aospinsight.dao.ProjectSummaryDao;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.net.RetrofitService;
 import com.tonybuilder.aospinsight.net.model.Api;
+import com.tonybuilder.aospinsight.repository.common.NetworkBoundResource;
+import com.tonybuilder.aospinsight.repository.common.StatusResource;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 /**
@@ -33,80 +38,35 @@ public class ProjectSummaryRepo {
         this.appExecutors = appExecutors;
     }
 
-    public LiveData<Resource<Api<List<ProjectSummary>>>> loadProjectSummaries(Integer projectId, String since, String until) {
+    public LiveData<StatusResource<List<ProjectSummary>>> loadProjectSummaries(Integer projectId, String since, String until) {
         Log.i(TAG, "project id = " + projectId + "since = " + since + " until = " + until);
-        return retrofitService.getProjectSummary(projectId, since, until);
+        //return retrofitService.getProjectSummary(projectId, since, until);
+        return new NetworkBoundResource<List<ProjectSummary>,Api<List<ProjectSummary>>>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull Api<List<ProjectSummary>> item) {
+                for (ProjectSummary projectSummary: item.getPayload()) {
+                    projectSummaryDao.insert(projectSummary);
+                }
+            }
 
-//        //TODO: fetch from net api or local database cache.
-//        Observable<Api<List<ProjectSummary>>> observableProjectSummary = retrofitService.getProjectSummary(projectId, since, until);
-//        observableProjectSummary.subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new io.reactivex.Observer<Api<List<ProjectSummary>>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        Log.i(TAG, "onSubscribe ");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Log.i(TAG, "onError " + e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        Log.i(TAG, "onComplete ");
-//                        LineChartManager.initDataStyle(mLineChart, mLineData, ProjectSummaryActivity.this);
-//                    }
-//
-//                    @Override
-//                    public void onNext(Api<List<ProjectSummary>> api) {
-//                        Log.i(TAG, "onNext " + api.toString());
-//                        List<String> xValues = new ArrayList<>();
-//                        List<Float> yValues = new ArrayList<>();
-//                        if (api.getPayload() == null || api.getPayload().size() == 0) {
-//                            Log.e(TAG, "get null payload");
-//                            return;
-//                        }
-//                        for (ProjectSummary ps : api.getPayload()) {
-//                            Log.i(TAG, ps.toString());
-//                            String strXDate = sdf.format(ps.getProjectSummarySince());
-//                            xValues.add(strXDate);
-//                            yValues.add((float) ps.getProjectSummaryTotal());
-//                        }
-//
-//                        //设置图表的描述
-//                        mLineChart.setDescription(null);
-//                        mLineData = LineChartManager.creatSingleLineChart("changed lines", xValues, yValues);
-//                    }
-//                });
-//    }
+            @Override
+            protected boolean shouldFetch(@Nullable List<ProjectSummary> data) {
+                // TODO: repoListRateLimit.shouldFetch(owner)
+                return true;
+            }
 
+            @NonNull
+            @Override
+            protected LiveData<List<ProjectSummary>> loadFromDb() {
+                return projectSummaryDao.findByProjectId(projectId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Resource<Api<List<ProjectSummary>>>> createCall() {
+                return retrofitService.getProjectSummary(projectId, since, until);
+            }
+        }.asLiveData();
     }
-
-//    public LiveData<StatusResource<ProjectSummary>> loadProjectSummary(String login) {
-//        return new NetworkBoundResource<ProjectSummary,ProjectSummary>(appExecutors) {
-//            @Override
-//            protected void saveCallResult(@NonNull ProjectSummary item) {
-//                projectSummaryDao.insert(item);
-//            }
-//
-//            @Override
-//            protected boolean shouldFetch(@Nullable ProjectSummary data) {
-//                return data == null;
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<ProjectSummary> loadFromDb() {
-//                return projectSummaryDao.findByLogin(login);
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<ApiResponse<ProjectSummary>> createCall() {
-//                return retrofitService.getUser(login);
-//            }
-//        }.asLiveData();
-//    }
 }
 

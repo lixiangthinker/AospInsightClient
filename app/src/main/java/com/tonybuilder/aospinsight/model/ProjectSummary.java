@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class ProjectSummary {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int projectSummaryId;
 
     @ColumnInfo(name = "project_summary_orig_id")

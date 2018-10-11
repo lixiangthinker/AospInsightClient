@@ -14,6 +14,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.net.model.Api;
+import com.tonybuilder.aospinsight.repository.common.Status;
+import com.tonybuilder.aospinsight.repository.common.StatusResource;
 import com.tonybuilder.aospinsight.view.utils.LineChartManager;
 import com.tonybuilder.aospinsight.viewmodel.ProjectSummaryViewModel;
 
@@ -68,31 +70,30 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         tvProjectName.setText(projectName);
     }
 
-    final Observer<Resource<Api<List<ProjectSummary>>>> projectSummariesObserver = resource -> {
+    final Observer<StatusResource<List<ProjectSummary>>> projectSummariesObserver = resource -> {
         Log.i(TAG, "projectSummariesObserver onChange, refresh chart");
-        if (resource.isSuccess()) {
-            Api<List<ProjectSummary>> api = resource.getResource();
-            Log.i(TAG, "onNext " + api);
-            List<String> xValues = new ArrayList<>();
-            List<Float> yValues = new ArrayList<>();
-            if (api.getResultCode() != Api.ERROR_CODE_NONE || api.getPayload() == null || api.getPayload().size() == 0) {
-                Log.e(TAG, "get null payload");
-                return;
-            }
-            for (ProjectSummary ps : api.getPayload()) {
-                Log.i(TAG, ps.toString());
-                String strXDate = sdf.format(ps.getProjectSummarySince());
-                xValues.add(strXDate);
-                yValues.add((float) ps.getProjectSummaryTotal());
-            }
-
-            //设置图表的描述
-            mLineChart.setDescription(null);
-            mLineData = LineChartManager.creatSingleLineChart("changed lines", xValues, yValues);
-
-            LineChartManager.initDataStyle(mLineChart, mLineData, ProjectSummaryActivity.this);
-        } else {
-            Log.e(TAG, resource.getError().getMessage());
+        switch (resource.status) {
+            case SUCCESS:
+                List<String> xValues = new ArrayList<>();
+                List<Float> yValues = new ArrayList<>();
+                for (ProjectSummary ps : resource.data) {
+                    Log.i(TAG, ps.toString());
+                    String strXDate = sdf.format(ps.getProjectSummarySince());
+                    xValues.add(strXDate);
+                    yValues.add((float) ps.getProjectSummaryTotal());
+                }
+                mLineChart.setDescription(null);
+                mLineData = LineChartManager.creatSingleLineChart("changed lines", xValues, yValues);
+                LineChartManager.initDataStyle(mLineChart, mLineData, ProjectSummaryActivity.this);
+                break;
+            case LOADING:
+                break;
+            case ERROR:
+                Log.e(TAG, resource.message);
+                break;
+            default:
+                Log.e(TAG, resource.message);
+                break;
         }
     };
 

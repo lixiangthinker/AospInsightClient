@@ -61,8 +61,7 @@ public class ProjectRepo {
             @NonNull
             @Override
             protected LiveData<List<Project>> loadFromDb() {
-                LiveData<List<Project>> result = projectDao.getAll();
-                return result;
+                return projectDao.getAll();
             }
 
             @NonNull
@@ -70,12 +69,6 @@ public class ProjectRepo {
             protected LiveData<Resource<Api<List<Project>>>> createCall() {
                 return retrofitService.getProjects();
             }
-
-//            @NonNull
-//            @Override
-//            protected LiveData<StatusResource<Api<List<Project>>>> createCall() {
-//                return retrofitService.getProjects();
-//            }
         }.asLiveData();
     }
 }
