@@ -9,14 +9,20 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.github.leonardoxh.livedatacalladapter.Resource;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.repository.common.Status;
 import com.tonybuilder.aospinsight.repository.common.StatusResource;
 import com.tonybuilder.aospinsight.view.utils.LineChartManager;
+import com.tonybuilder.aospinsight.view.utils.StackedBarManager;
 import com.tonybuilder.aospinsight.viewmodel.ProjectSummaryViewModel;
 
 import java.text.SimpleDateFormat;
@@ -41,9 +47,11 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
     ViewModelProvider.Factory viewModelFactory;
     private ProjectSummaryViewModel projectSummaryViewModel;
 
-    // in this example, a LineChart is initialized from xml
     private LineChart mLineChart;
     private LineData mLineData;
+
+    private BarChart mBarChart;
+    private BarData mBarData;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
 
@@ -56,6 +64,7 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
 
         initProjectInfo(projectSummaryViewModel);
         initChart();
+        initBarChart();
         subscribe();
     }
 
@@ -70,21 +79,28 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         tvProjectName.setText(projectName);
     }
 
+    private List<String> xValues = new ArrayList<>();
     final Observer<StatusResource<List<ProjectSummary>>> projectSummariesObserver = resource -> {
         Log.i(TAG, "projectSummariesObserver onChange, refresh chart");
         switch (resource.status) {
             case SUCCESS:
-                List<String> xValues = new ArrayList<>();
                 List<Float> yValues = new ArrayList<>();
+                List<Float> yFirstValues = new ArrayList<>();
+                List<Float> ySecondValues = new ArrayList<>();
                 for (ProjectSummary ps : resource.data) {
                     Log.i(TAG, ps.toString());
                     String strXDate = sdf.format(ps.getProjectSummarySince());
                     xValues.add(strXDate);
                     yValues.add((float) ps.getProjectSummaryTotal());
+                    yFirstValues.add((float) ps.getProjectSummaryAdded());
+                    ySecondValues.add((float) ps.getProjectSummaryDeleted());
                 }
-                mLineChart.setDescription(null);
                 mLineData = LineChartManager.creatSingleLineChart("changed lines", xValues, yValues);
-                LineChartManager.initDataStyle(mLineChart, mLineData, ProjectSummaryActivity.this);
+                LineChartManager.initDataStyle(mLineChart, mLineData);
+
+                mBarData = StackedBarManager.creatDoubleStackChart("modified", xValues,
+                        yFirstValues, ySecondValues, "inserted", "deleted");
+                StackedBarManager.initDataStyle(mBarChart, mBarData);
                 break;
             case LOADING:
                 break;
@@ -212,6 +228,32 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         List<Float> yValues = getDefaultYValues();
 
         mLineData = LineChartManager.creatSingleLineChart("changed lines", xValues, yValues);
-        LineChartManager.initDataStyle(mLineChart, mLineData, this);
+        LineChartManager.initDataStyle(mLineChart, mLineData);
+    }
+
+    private void initBarChart() {
+        mBarChart = findViewById(R.id.chartBar);
+        mBarChart.setDescription(null);
+
+        List<String> xValues = getDefaultXValues();
+        List<Float> yFirstValues = getDefaultYValues();
+        List<Float> ySecondValues = getDefaultYValues();
+
+        mBarData = StackedBarManager.creatDoubleStackChart("modified", xValues,
+                yFirstValues, ySecondValues, "inserted", "deleted");
+        StackedBarManager.initDataStyle(mBarChart, mBarData);
+        mBarChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                Log.i(TAG, "onValueSelected, x = " + e.getXIndex());
+                //Log.i(TAG, "onValueSelected month = " +  xValues.get(e.getXIndex()-1));
+                // TODO: jump to commit list page
+            }
+
+            @Override
+            public void onNothingSelected() {
+                Log.i(TAG, "onNothingSelected");
+            }
+        });
     }
 }

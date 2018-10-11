@@ -50,11 +50,10 @@ public class LineChartManager {
         dataSets.add(dataSet);
 
         //构建一个LineData  将dataSets放入
-        LineData lineData = new LineData(xValues, dataSets);
-        return lineData;
+        return new LineData(xValues, dataSets);
     }
 
-    public static void initDataStyle(LineChart lineChart, LineData lineData, Context context) {
+    public static void initDataStyle(LineChart lineChart, LineData lineData) {
         //设置点击折线点时，显示其数值
         lineChart.setDrawBorders(false); //在折线图上添加边框
         //lineChart.setDescription("时间/数据"); //数据描述
