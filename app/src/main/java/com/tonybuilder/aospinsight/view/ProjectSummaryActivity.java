@@ -72,7 +72,7 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         Log.i(TAG, "projectSummariesObserver onChange, refresh chart");
         if (resource.isSuccess()) {
             Api<List<ProjectSummary>> api = resource.getResource();
-            Log.i(TAG, "onNext " + api.toString());
+            Log.i(TAG, "onNext " + api);
             List<String> xValues = new ArrayList<>();
             List<Float> yValues = new ArrayList<>();
             if (api.getResultCode() != Api.ERROR_CODE_NONE || api.getPayload() == null || api.getPayload().size() == 0) {

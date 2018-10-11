@@ -53,7 +53,8 @@ class AppModule {
                 .build();
 
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.1.111:8080/")
+                // change from ip to url http://192.168.1.111:8080/
+                .baseUrl("http://lixiangthinker.eicp.net")
                 .client(client)
                 .addCallAdapterFactory(LiveDataCallAdapterFactory.create())
                 .addConverterFactory(LiveDataResponseBodyConverterFactory.create())

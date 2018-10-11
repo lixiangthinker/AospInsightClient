@@ -21,22 +21,6 @@ public class Api<T> {
         this.message = message;
     }
 
-    public Api ok(T payload) {
-        return new Api(payload, Api.ERROR_CODE_NONE, "OK",Api.VERSION);
-    }
-
-    public static Api resourceNotFound(String message) {
-        return new Api(null, Api.ERROR_CODE_RESOURCE_NOT_FOUND, message, Api.VERSION);
-    }
-
-    public static Api internalError(String message) {
-        return new Api(null, Api.ERROR_CODE_INTERNAL_ERROR, message, Api.VERSION);
-    }
-
-    public static Api paramNotValid(String message) {
-        return new Api(null, Api.ERROR_CODE_PARAM_NOT_VALID, message, Api.VERSION);
-    }
-
     public int getResultCode() {
         return resultCode;
     }

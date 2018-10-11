@@ -131,7 +131,7 @@ public class ProjectActivity extends DaggerAppCompatActivity {
     private void initSearchView(Menu menu) {
         MenuItem searchItem = menu.findItem(R.id.menu_project_search);
         SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        mSearchView.setIconified(false);
+        mSearchView.setIconified(true);
         mSearchView.setQueryHint("input project name");
 
         mSearchView.setOnCloseListener(() -> {

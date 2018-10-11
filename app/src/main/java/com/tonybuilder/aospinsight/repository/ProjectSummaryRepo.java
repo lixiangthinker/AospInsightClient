@@ -35,7 +35,7 @@ public class ProjectSummaryRepo {
 
     public LiveData<Resource<Api<List<ProjectSummary>>>> loadProjectSummaries(Integer projectId, String since, String until) {
         Log.i(TAG, "project id = " + projectId + "since = " + since + " until = " + until);
-        return retrofitService.getProjectSummary(projectId, "2018-01-01", "2018-09-01");
+        return retrofitService.getProjectSummary(projectId, since, until);
 
 //        //TODO: fetch from net api or local database cache.
 //        Observable<Api<List<ProjectSummary>>> observableProjectSummary = retrofitService.getProjectSummary(projectId, since, until);
