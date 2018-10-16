@@ -79,7 +79,7 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         tvProjectName.setText(projectName);
     }
 
-    private List<String> xValues = new ArrayList<>();
+    private List<String> mXvalues = new ArrayList<>();
     final Observer<StatusResource<List<ProjectSummary>>> projectSummariesObserver = resource -> {
         Log.i(TAG, "projectSummariesObserver onChange, refresh chart");
         switch (resource.status) {
@@ -90,15 +90,15 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
                 for (ProjectSummary ps : resource.data) {
                     Log.i(TAG, ps.toString());
                     String strXDate = sdf.format(ps.getProjectSummarySince());
-                    xValues.add(strXDate);
+                    mXvalues.add(strXDate);
                     yValues.add((float) ps.getProjectSummaryTotal());
                     yFirstValues.add((float) ps.getProjectSummaryAdded());
                     ySecondValues.add((float) ps.getProjectSummaryDeleted());
                 }
-                mLineData = LineChartManager.creatSingleLineChart("changed lines", xValues, yValues);
+                mLineData = LineChartManager.creatSingleLineChart("changed lines", mXvalues, yValues);
                 LineChartManager.initDataStyle(mLineChart, mLineData);
 
-                mBarData = StackedBarManager.creatDoubleStackChart("modified", xValues,
+                mBarData = StackedBarManager.creatDoubleStackChart("modified", mXvalues,
                         yFirstValues, ySecondValues, "inserted", "deleted");
                 StackedBarManager.initDataStyle(mBarChart, mBarData);
                 break;
@@ -246,8 +246,7 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
                 Log.i(TAG, "onValueSelected, x = " + e.getXIndex());
-                //Log.i(TAG, "onValueSelected month = " +  xValues.get(e.getXIndex()-1));
-                // TODO: jump to commit list page
+                projectSummaryViewModel.onValueSelected(mXvalues.get(e.getXIndex()));
             }
 
             @Override

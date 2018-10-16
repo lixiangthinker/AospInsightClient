@@ -1,6 +1,7 @@
 package com.tonybuilder.aospinsight.net;
 
 import com.github.leonardoxh.livedatacalladapter.Resource;
+import com.tonybuilder.aospinsight.model.Commit;
 import com.tonybuilder.aospinsight.model.Project;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.net.model.Api;
@@ -29,4 +30,11 @@ public interface RetrofitService {
      */
     @GET("api/project")
     LiveData<Resource<Api<List<Project>>>> getProjects();
+
+    /**
+     * get project list info
+     */
+    @GET("api/commit/{projectId}/{month}")
+    LiveData<Resource<Api<List<Commit>>>> getCommitsByMonth(@Path("projectId") Integer projectId,
+                                                     @Path("month") String month);
 }

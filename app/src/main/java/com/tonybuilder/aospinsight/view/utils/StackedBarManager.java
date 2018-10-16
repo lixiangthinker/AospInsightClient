@@ -2,6 +2,7 @@ package com.tonybuilder.aospinsight.view.utils;
 
 import android.graphics.Color;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -83,6 +84,8 @@ public class StackedBarManager {
         legend.setFormToTextSpace(4f);
         legend.setXEntrySpace(6f);
 
+        barChart.animateY(2000, Easing.EasingOption.Linear);
+        barChart.animateX(2000, Easing.EasingOption.Linear);
         barChart.invalidate();
     }
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="4dp"
+    tools:context=".view.CommitListActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_commit_hash_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                tools:text = "commit 5666119e79c"/>
+            <TextView
+                android:id="@+id/tv_commit_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                tools:text = "Author: Jakub Pawlowski <jpawlowski@google.com>"/>
+            <TextView
+                android:id="@+id/tv_commit_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                tools:text = "Date:   Mon Aug 6 17:45:38 2018 +0200"/>
+            <TextView
+                android:id="@+id/tv_commit_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                tools:text = "\tFix NPE when starting advertising with null GATT"/>
+            <TextView
+                android:id="@+id/tv_commit_numstat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                tools:text = "8 insertions(+), 1 deletion(-)"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imv_commit_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:src="@drawable/ic_chevron_right_grey_24dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

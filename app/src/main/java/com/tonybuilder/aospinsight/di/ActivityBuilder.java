@@ -1,8 +1,10 @@
 package com.tonybuilder.aospinsight.di;
 
 import com.tonybuilder.aospinsight.MainActivity;
+import com.tonybuilder.aospinsight.view.CommitListActivity;
 import com.tonybuilder.aospinsight.view.ProjectActivity;
 import com.tonybuilder.aospinsight.view.ProjectSummaryActivity;
+import com.tonybuilder.aospinsight.viewmodel.CommitListViewModel;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -18,4 +20,7 @@ public abstract class ActivityBuilder {
 
     @ContributesAndroidInjector
     abstract ProjectSummaryActivity contributeProjectSummaryActivity();
+
+    @ContributesAndroidInjector
+    abstract CommitListActivity contributeCommitListActivity();
 }

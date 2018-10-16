@@ -1,6 +1,7 @@
 package com.tonybuilder.aospinsight.di;
 
 import com.tonybuilder.aospinsight.viewmodel.AospInsightViewModelFactory;
+import com.tonybuilder.aospinsight.viewmodel.CommitListViewModel;
 import com.tonybuilder.aospinsight.viewmodel.ProjectSummaryViewModel;
 import com.tonybuilder.aospinsight.viewmodel.ProjectViewModel;
 
@@ -21,6 +22,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProjectViewModel.class)
     abstract ViewModel bindProjectViewModel(ProjectViewModel projectViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CommitListViewModel.class)
+    abstract ViewModel bindCommitListViewModel(CommitListViewModel commitListViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(AospInsightViewModelFactory factory);

@@ -1,8 +1,6 @@
 package com.tonybuilder.aospinsight.viewmodel;
 
-import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
-import com.tonybuilder.aospinsight.net.model.Api;
 import com.tonybuilder.aospinsight.repository.ProjectSummaryRepo;
 import com.tonybuilder.aospinsight.repository.common.StatusResource;
 
@@ -85,5 +83,8 @@ public class ProjectSummaryViewModel extends ViewModel {
 
     public void setProjectInfo(Map<Integer,String> projectMap) {
         projectIdNameMap.setValue(projectMap);
+    }
+
+    public void onValueSelected(String month) {
     }
 }
