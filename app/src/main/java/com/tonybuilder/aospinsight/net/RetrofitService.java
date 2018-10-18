@@ -11,6 +11,7 @@ import java.util.List;
 import androidx.lifecycle.LiveData;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface RetrofitService {
 
@@ -32,9 +33,11 @@ public interface RetrofitService {
     LiveData<Resource<Api<List<Project>>>> getProjects();
 
     /**
-     * get project list info
+     * get paged commit info list
      */
     @GET("api/commit/{projectId}/{month}")
     LiveData<Resource<Api<List<Commit>>>> getCommitsByMonth(@Path("projectId") Integer projectId,
-                                                     @Path("month") String month);
+                                                            @Path("month") String month,
+                                                            @Query("pageIndex") int pageIndex,
+                                                            @Query("pageSize") int pageSize);
 }

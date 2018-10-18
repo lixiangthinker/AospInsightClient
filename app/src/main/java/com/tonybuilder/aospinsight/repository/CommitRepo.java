@@ -28,7 +28,7 @@ public class CommitRepo {
         this.appExecutors = appExecutors;
     }
 
-    public LiveData<Resource<Api<List<Commit>>>> getCommitsByMonth(int projectId, String month) {
-        return retrofitService.getCommitsByMonth(projectId, month);
+    public LiveData<Resource<Api<List<Commit>>>> getCommitsByMonth(int projectId, String month, int pageIndex, int pageSize) {
+        return retrofitService.getCommitsByMonth(projectId, month, pageIndex, pageSize);
     }
 }

@@ -1,5 +1,6 @@
 package com.tonybuilder.aospinsight.net.model;
 
+
 import androidx.annotation.NonNull;
 
 public class Api<T> {
@@ -14,11 +15,14 @@ public class Api<T> {
     private T payload;
     private String message;
 
-    public Api(T payload, int resultCode, String message, String version) {
+    private PagingInfo pageInfo;
+
+    public Api(T payload, int resultCode, String message, String version, PagingInfo pageInfo) {
         this.resultCode = resultCode;
         this.version = version;
         this.payload = payload;
         this.message = message;
+        this.pageInfo = pageInfo;
     }
 
     public int getResultCode() {
@@ -53,12 +57,20 @@ public class Api<T> {
         this.message = message;
     }
 
+    public PagingInfo getPageInfo() {
+        return pageInfo;
+    }
+
+    public void setPageInfo(PagingInfo pageInfo) {
+        this.pageInfo = pageInfo;
+    }
     @NonNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[" + resultCode + ",");
         sb.append(" " + version + ",");
+        sb.append(" " + pageInfo + ",");
         sb.append(" " + message + "]");
         return sb.toString();
     }

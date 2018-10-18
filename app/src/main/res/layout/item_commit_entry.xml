@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                tools:text = "Author: Jakub Pawlowski <jpawlowski@google.com>"/>
+                tools:text = "Author: Jakub Pawlowski jpawlowski@google.com"/>
             <TextView
                 android:id="@+id/tv_commit_date"
                 android:layout_width="match_parent"
