@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import com.google.android.material.snackbar.Snackbar;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.Project;
-import com.tonybuilder.aospinsight.repository.common.Status;
 import com.tonybuilder.aospinsight.viewmodel.ProjectViewModel;
 
 import java.util.ArrayList;

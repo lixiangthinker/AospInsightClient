@@ -21,7 +21,7 @@ import android.util.Log;
 import com.github.leonardoxh.livedatacalladapter.LiveDataCallAdapterFactory;
 import com.github.leonardoxh.livedatacalladapter.LiveDataResponseBodyConverterFactory;
 import com.tonybuilder.aospinsight.AospInsightApp;
-import com.tonybuilder.aospinsight.dao.AospInsightDatebase;
+import com.tonybuilder.aospinsight.dao.AospInsightDatabase;
 import com.tonybuilder.aospinsight.dao.ProjectDao;
 import com.tonybuilder.aospinsight.dao.ProjectSummaryDao;
 import com.tonybuilder.aospinsight.net.RetrofitService;
@@ -62,17 +62,17 @@ class AppModule {
     }
 
     @Singleton @Provides
-    AospInsightDatebase provideDb(AospInsightApp app) {
-        return AospInsightDatebase.getInstance(app);
+    AospInsightDatabase provideDb(AospInsightApp app) {
+        return AospInsightDatabase.getInstance(app);
     }
 
     @Singleton @Provides
-    ProjectSummaryDao provideProjectSummaryDao(AospInsightDatebase db) {
+    ProjectSummaryDao provideProjectSummaryDao(AospInsightDatabase db) {
         return db.projectSummaryDao();
     }
 
     @Singleton @Provides
-    ProjectDao provideProjectDao(AospInsightDatebase db) {
+    ProjectDao provideProjectDao(AospInsightDatabase db) {
         return db.projectDao();
     }
 }

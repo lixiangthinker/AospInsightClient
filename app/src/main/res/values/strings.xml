@@ -7,6 +7,8 @@
     <string name="btn_cancel">Cancel</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_change_project">Change Project</string>
-    <string name="menu_change_date_since">Date Since..</string>
-    <string name="menu_change_date_until">Date Until...</string>
+    <string name="menu_change_date_since">Date Since…</string>
+    <string name="menu_change_date_until">Date Until…</string>
+    <string name="right_arrow_desc">press for detail</string>
+    <string name="menu_title_search">Search</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.tonybuilder.aospinsight.view.utils;
 
-import android.content.Context;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.animation.Easing;

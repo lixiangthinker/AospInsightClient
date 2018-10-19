@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_project_search"
         android:orderInCategory="100"
-        android:title="Search"
+        android:title="@string/menu_title_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"
         />

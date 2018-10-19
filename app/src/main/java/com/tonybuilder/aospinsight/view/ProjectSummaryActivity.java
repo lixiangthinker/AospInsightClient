@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
@@ -18,8 +17,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.tonybuilder.aospinsight.R;
 import com.tonybuilder.aospinsight.model.ProjectSummary;
-import com.tonybuilder.aospinsight.net.model.Api;
-import com.tonybuilder.aospinsight.repository.common.Status;
 import com.tonybuilder.aospinsight.repository.common.StatusResource;
 import com.tonybuilder.aospinsight.view.utils.LineChartManager;
 import com.tonybuilder.aospinsight.view.utils.StackedBarManager;
@@ -125,14 +122,10 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         };
         projectSummaryViewModel.getProjectIdNameMap().observe(this, projectIdNameObserver);
 
-        final Observer<Calendar> calendarSinceObserver = calendar -> {
-            Log.i(TAG, "since = " + calendar);
-        };
+        final Observer<Calendar> calendarSinceObserver = calendar -> Log.i(TAG, "since = " + calendar);
         projectSummaryViewModel.getCalendarSince().observe(this, calendarSinceObserver);
 
-        final Observer<Calendar> calendarUntilObserver = calendar -> {
-            Log.i(TAG, "until = " + calendar);
-        };
+        final Observer<Calendar> calendarUntilObserver = calendar -> Log.i(TAG, "until = " + calendar);
         projectSummaryViewModel.getCalendarUntil().observe(this, calendarUntilObserver);
     }
 

@@ -12,22 +12,22 @@ import androidx.room.TypeConverters;
 
 @Database(entities = {ProjectSummary.class, Project.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
-public abstract class AospInsightDatebase extends RoomDatabase {
-    private static final String DB_NAME = "AospInsightDatebase.db";
+public abstract class AospInsightDatabase extends RoomDatabase {
+    private static final String DB_NAME = "AospInsightDatabase.db";
 
-    private static volatile AospInsightDatebase instance;
+    private static volatile AospInsightDatabase instance;
 
-    public static synchronized AospInsightDatebase getInstance(Context context) {
+    public static synchronized AospInsightDatabase getInstance(Context context) {
         if (instance == null) {
             instance = create(context);
         }
         return instance;
     }
 
-    private static AospInsightDatebase create(final Context context) {
+    private static AospInsightDatabase create(final Context context) {
         return Room.databaseBuilder(
                 context,
-                AospInsightDatebase.class,
+                AospInsightDatabase.class,
                 DB_NAME).build();
     }
     public abstract ProjectSummaryDao projectSummaryDao();

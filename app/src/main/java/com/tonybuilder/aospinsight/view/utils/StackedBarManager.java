@@ -39,7 +39,7 @@ public class StackedBarManager {
         set1.setColors(getColors());
         set1.setStackLabels(new String[]{labelFirst, labelSecond});
 
-        List<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        List<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
         BarData data = new BarData(xValues, dataSets);

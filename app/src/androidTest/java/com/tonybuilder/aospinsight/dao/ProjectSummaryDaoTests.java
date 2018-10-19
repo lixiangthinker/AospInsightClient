@@ -1,12 +1,10 @@
 package com.tonybuilder.aospinsight.dao;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +14,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
@@ -25,15 +22,15 @@ import androidx.test.runner.AndroidJUnit4;
 @RunWith(AndroidJUnit4.class)
 public class ProjectSummaryDaoTests {
     private static final String TAG = "ProjectSummaryDaoTests";
-    private static final String DB_NAME = "AospInsightDatebase.db";
+    private static final String DB_NAME = "AospInsightDatabase.db";
     private ProjectSummaryDao projectSummaryDao;
-    private AospInsightDatebase mDb;
+    private AospInsightDatabase mDb;
 
     @Before
     public void createDb() {
         Context context = InstrumentationRegistry.getTargetContext();
-        //mDb = Room.inMemoryDatabaseBuilder(context, AospInsightDatebase.class).build();
-        mDb = Room.databaseBuilder(context, AospInsightDatebase.class, DB_NAME).build();
+        //mDb = Room.inMemoryDatabaseBuilder(context, AospInsightDatabase.class).build();
+        mDb = Room.databaseBuilder(context, AospInsightDatabase.class, DB_NAME).build();
         projectSummaryDao = mDb.projectSummaryDao();
     }
 
