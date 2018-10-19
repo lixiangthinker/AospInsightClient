@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
@@ -84,8 +85,13 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 });
             } else {
                 onFetchFailed();
-                result.addSource(dbSource,
-                        newData -> setValue(StatusResource.error(response.getError().getMessage(), newData)));
+                result.addSource(dbSource, newData -> {
+                    String msg = "error response.";
+                    if (response.getError() != null) {
+                        msg = response.getError().getMessage();
+                    }
+                    setValue(StatusResource.error(msg, newData));
+                });
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.tonybuilder.aospinsight.viewmodel;
 
+import android.util.SparseArray;
+
 import com.tonybuilder.aospinsight.model.ProjectSummary;
 import com.tonybuilder.aospinsight.repository.ProjectSummaryRepo;
 import com.tonybuilder.aospinsight.repository.common.StatusResource;
@@ -8,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -19,8 +20,11 @@ import androidx.lifecycle.ViewModel;
 
 public class ProjectSummaryViewModel extends ViewModel {
 
+    private static final int DEFAULT_PROJECT_ID = 390;
+
     private ProjectSummaryRepo projectSummaryRepo;
-    private MutableLiveData<Map<Integer, String>> projectIdNameMap = new MutableLiveData<>();
+    private MutableLiveData<SparseArray<String>> projectIdNameArray = new MutableLiveData<>();
+
     private LiveData<StatusResource<List<ProjectSummary>>> projectSummaries;
 
     private MutableLiveData<Calendar> calendarSince = new MutableLiveData<>();
@@ -31,8 +35,8 @@ public class ProjectSummaryViewModel extends ViewModel {
         this.projectSummaryRepo = projectSummaryRepo;
     }
 
-    public LiveData<Map<Integer, String>> getProjectIdNameMap() {
-        return projectIdNameMap;
+    public LiveData<SparseArray<String>> getProjectIdNameArray() {
+        return projectIdNameArray;
     }
 
     private String getDateString(LiveData<Calendar> date, @NonNull String defaultValue) {
@@ -44,16 +48,12 @@ public class ProjectSummaryViewModel extends ViewModel {
         return sdf.format(calDate.getTime());
     }
 
-    private Integer getProjectIdLocal(LiveData<Map<Integer, String>> liveMap, int defaultValue) {
-        Map<Integer, String> projectIdMap = liveMap.getValue();
-        if (projectIdMap == null || projectIdMap.isEmpty()) {
-            return defaultValue;
+    private Integer getProjectIdLocal(LiveData<SparseArray<String>> liveArray) {
+        SparseArray<String> projectIdArray = liveArray.getValue();
+        if (projectIdArray == null || projectIdArray.size() == 0) {
+            return DEFAULT_PROJECT_ID;
         }
-
-        for (Map.Entry<Integer, String> entry : projectIdMap.entrySet()) {
-            return entry.getKey();
-        }
-        return defaultValue;
+        return projectIdArray.keyAt(0);
     }
 
     public LiveData<StatusResource<List<ProjectSummary>>> getProjectSummaries() {
@@ -61,7 +61,7 @@ public class ProjectSummaryViewModel extends ViewModel {
         String since = getDateString(calendarSince, "2017-01-01");
         String until = getDateString(calendarUntil,"2018-09-01");
 
-        Integer projectId = getProjectIdLocal(projectIdNameMap, 390);
+        Integer projectId = getProjectIdLocal(projectIdNameArray);
 
         projectSummaries = projectSummaryRepo.loadProjectSummaries(projectId, since, until);
 
@@ -81,8 +81,8 @@ public class ProjectSummaryViewModel extends ViewModel {
         return calendarUntil;
     }
 
-    public void setProjectInfo(Map<Integer,String> projectMap) {
-        projectIdNameMap.setValue(projectMap);
+    public void setProjectInfo(SparseArray<String> projectArray) {
+        projectIdNameArray.setValue(projectArray);
     }
 
     public void onValueSelected(String month) {

@@ -1,7 +1,4 @@
 package com.tonybuilder.aospinsight.repository;
-/**
- * repository handle commit lists
- */
 
 import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.tonybuilder.aospinsight.AppExecutors;
@@ -16,6 +13,9 @@ import javax.inject.Singleton;
 
 import androidx.lifecycle.LiveData;
 
+/**
+ * repository handle commit lists
+ */
 @Singleton
 public class CommitRepo {
     private static final String TAG = "CommitRepo";

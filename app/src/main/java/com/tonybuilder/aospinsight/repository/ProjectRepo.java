@@ -1,7 +1,4 @@
 package com.tonybuilder.aospinsight.repository;
-/**
- * repository handle project lists
- */
 
 import android.util.Log;
 
@@ -23,6 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+/**
+ * repository handle project lists
+ */
 @Singleton
 public class ProjectRepo {
     private static final String TAG = "ProjectSummaryRepo";

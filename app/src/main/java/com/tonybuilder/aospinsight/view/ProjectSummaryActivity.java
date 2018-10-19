@@ -3,6 +3,7 @@ package com.tonybuilder.aospinsight.view;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,10 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -69,9 +68,10 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         String projectName = getIntent().getStringExtra("projectName");
         int projectId = getIntent().getIntExtra("projectId", 390);
 
-        Map<Integer, String> projectMap = new HashMap<>();
-        projectMap.put(projectId, projectName);
-        viewModel.setProjectInfo(projectMap);
+        SparseArray<String> projectArray = new SparseArray<>();
+        projectArray.put(projectId, projectName);
+
+        viewModel.setProjectInfo(projectArray);
         TextView tvProjectName = findViewById(R.id.tv_project_name);
         tvProjectName.setText(projectName);
     }
@@ -115,12 +115,14 @@ public class ProjectSummaryActivity extends DaggerAppCompatActivity {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         projectSummaryViewModel.getProjectSummaries().observe(this, projectSummariesObserver);
 
-        final Observer<Map<Integer, String>> projectIdNameObserver = integerStringMap -> {
-            for (Map.Entry<Integer, String> entry : integerStringMap.entrySet()) {
-                Log.i(TAG, "project = [" + entry.getKey() + "," + entry.getValue() + "]");
+        final Observer<SparseArray<String>> projectIdNameObserver = array -> {
+            for(int i = 0; i < array.size(); i++) {
+                int key = array.keyAt(i);
+                String projectName = array.get(key);
+                Log.i(TAG, "project = [" + key + "," + projectName + "]");
             }
         };
-        projectSummaryViewModel.getProjectIdNameMap().observe(this, projectIdNameObserver);
+        projectSummaryViewModel.getProjectIdNameArray().observe(this, projectIdNameObserver);
 
         final Observer<Calendar> calendarSinceObserver = calendar -> Log.i(TAG, "since = " + calendar);
         projectSummaryViewModel.getCalendarSince().observe(this, calendarSinceObserver);
