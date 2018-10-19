@@ -67,11 +67,9 @@ public class Api<T> {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[" + resultCode + ",");
-        sb.append(" " + version + ",");
-        sb.append(" " + pageInfo + ",");
-        sb.append(" " + message + "]");
-        return sb.toString();
+        return "[resultCode = "+ resultCode
+                + ",version = " + version
+                + ",pageInfo = " + pageInfo
+                + ",message = " + message + "]";
     }
 }

@@ -91,15 +91,13 @@ public class PagingInfo {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[" + total + ",");
-        sb.append(" " + pageNum + ",");
-        sb.append(" " + pageSize + ",");
-        sb.append(" " + startRow + ",");
-        sb.append(" " + endRow + ",");
-        sb.append(" " + pages + ",");
-        sb.append(" " + prePage + ",");
-        sb.append(" " + nextPage + "]");
-        return sb.toString();
+        return "[total = " + total
+                + ", pageNum = " + pageNum
+                + ", pageSize = " + pageSize
+                + ", startRow = " + startRow
+                + ", endRow = " + endRow
+                +", pages = " + pages
+                +", prePage = " + prePage
+                + ", nextPage = " + nextPage+ "]";
     }
 }

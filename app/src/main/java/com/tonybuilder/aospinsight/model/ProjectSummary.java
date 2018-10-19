@@ -88,14 +88,12 @@ public class ProjectSummary {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[" + projectSummaryId + ",");
-        sb.append(" " + projectSummaryOrigId + ",");
-        sb.append(" " + projectSummaryAdded + ",");
-        sb.append(" " + projectSummaryDeleted + ",");
-        sb.append(" " + projectSummaryTotal + ",");
-        sb.append(" " + projectSummarySince + ",");
-        sb.append(" " + projectSummaryUntil + "]");
-        return sb.toString();
+        return "[id = " + projectSummaryId
+                + ", origId = " + projectSummaryOrigId
+                + ", added = " + projectSummaryAdded
+                + ", deleted = " + projectSummaryDeleted
+                + ", total = " + projectSummaryTotal
+                + ", since = " + projectSummarySince
+                + ", until = " + projectSummaryUntil +"]";
     }
 }
