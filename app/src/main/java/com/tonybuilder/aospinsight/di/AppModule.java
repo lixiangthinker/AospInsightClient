@@ -39,21 +39,33 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module(includes = ViewModelModule.class)
 class AppModule {
-    @Singleton @Provides
-    RetrofitService provideGithubService() {
+    @Singleton
+    @Provides
+    HttpLoggingInterceptor provideHttpLoggingInterceptor() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message ->
                 Log.i("NetApiLog", message));
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return loggingInterceptor;
+    }
 
+    @Singleton
+    @Provides
+    OkHttpClient provideOkHttpClient(HttpLoggingInterceptor loggingInterceptor) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .readTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
                 .build();
+        return client;
+    }
 
+    @Singleton
+    @Provides
+    RetrofitService provideGithubService(OkHttpClient client) {
         return new Retrofit.Builder()
-                .baseUrl("http://lixiangthinker.eicp.net:8080")
+                .baseUrl("http://192.168.43.59:8080")
+                //.baseUrl("http://lixiangthinker.eicp.net:8080")
                 .client(client)
                 .addCallAdapterFactory(LiveDataCallAdapterFactory.create())
                 .addConverterFactory(LiveDataResponseBodyConverterFactory.create())
@@ -61,17 +73,20 @@ class AppModule {
                 .build().create(RetrofitService.class);
     }
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     AospInsightDatabase provideDb(AospInsightApp app) {
         return AospInsightDatabase.getInstance(app);
     }
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     ProjectSummaryDao provideProjectSummaryDao(AospInsightDatabase db) {
         return db.projectSummaryDao();
     }
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     ProjectDao provideProjectDao(AospInsightDatabase db) {
         return db.projectDao();
     }

@@ -16,6 +16,8 @@
 
 package com.tonybuilder.aospinsight.repository.common;
 
+import android.util.Log;
+
 import com.github.leonardoxh.livedatacalladapter.Resource;
 import com.tonybuilder.aospinsight.AppExecutors;
 
@@ -27,7 +29,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
@@ -38,6 +39,7 @@ import androidx.lifecycle.Observer;
  * @param <RequestType>
  */
 public abstract class NetworkBoundResource<ResultType, RequestType> {
+    private static final String TAG = "NetworkBoundResource";
     private final AppExecutors appExecutors;
 
     private final MediatorLiveData<StatusResource<ResultType>> result = new MediatorLiveData<>();
@@ -97,6 +99,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     }
 
     protected void onFetchFailed() {
+        Log.d(TAG, "onFetchFailed");
     }
 
     public LiveData<StatusResource<ResultType>> asLiveData() {

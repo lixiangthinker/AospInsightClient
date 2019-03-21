@@ -42,9 +42,4 @@ public class MainActivity extends DaggerAppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
